@@ -9,8 +9,10 @@ include:
     file: .gitlab-ci-bash.yml
   - project: Public-tooling/cicd-templates
     file: .gitlab-ci-generic.yml
-  - "tooling-ci.yml"
-
+  - project: Public-tooling/python-shared-config
+    ref: v0.3.0
+    file: tooling-ci.yml
+    
 stages:
   - analysis
 
