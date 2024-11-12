@@ -1,0 +1,45 @@
+variables:
+  SKIP_VERSION_CHECK: "true"
+  RUFF_CONFIG: ruff/pyproject.toml
+
+include:
+  - project: Public-tooling/cicd-templates
+    file: .gitlab-ci-oi-mr-pipelines.yaml
+  - project: Public-tooling/cicd-templates
+    file: .gitlab-ci-bash.yml
+  - project: Public-tooling/cicd-templates
+    file: .gitlab-ci-generic.yml
+  - "tooling-ci.yml"
+
+stages:
+  - analysis
+
+yaml_lint:
+  extends: .generic_yaml
+
+Bash Formatting:
+  extends: .generic_shfmt_check
+  rules:
+    - changes:
+        - "**/*.sh"
+      when: on_success
+
+Bash Lint:
+  extends: .generic_shellcheck
+  rules:
+    - changes:
+        - "**/*.sh"
+      when: on_success
+
+TOML Lint:
+  extends: .generic_toml_lint
+  rules:
+    - changes:
+        - "**/*.toml"
+      when: on_success
+
+Ruff Linting + isort:
+  extends: .generic_ruff_check
+
+Ruff Formatting:
+  extends: .generic_ruff_format
